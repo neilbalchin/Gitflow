@@ -5,10 +5,12 @@ var reload         = browserSync.reload;
 var clean          = require('gulp-clean');
 var autoprefixer   = require('gulp-autoprefixer');
 var concat         = require('gulp-concat');
+var jquery         = require('jquery');
 
 var SOURCEPATH = {
     imgSource:  'src/img/**',
     jsSource:   'src/js/**',
+    jsSourceDest:'src/js',
     scssSource: 'src/scss/*.scss',
     htmlSource: 'src/*.html',
     imgSource:  'src/img/**'
@@ -20,6 +22,12 @@ var APPPATH = {
     fonts: 'app/fonts',
     img:   'app/img'
 }
+
+gulp.task('jquery', function(){
+    gulp.src('./node_modules/jquery/dist/jquery.min.js')
+    .pipe(gulp.dest(SOURCEPATH.jsSourceDest))
+    .pipe(gulp.dest(APPPATH.js))
+});
 
 gulp.task('sass', function(){
     gulp.src(SOURCEPATH.scssSource)
@@ -63,7 +71,7 @@ gulp.task('images', function(){
     .pipe(gulp.dest(APPPATH.img))
 });
 
-gulp.task('watch', ['serve','sass','clean-html','clean-scripts','scripts','images','html'], function(){
+gulp.task('watch', ['serve','sass','clean-html','clean-scripts','scripts','images','html','jquery'], function(){
     gulp.watch([SOURCEPATH.scssSource], ['sass']);
     gulp.watch([SOURCEPATH.jsSource],   ['scripts']);
     gulp.watch([SOURCEPATH.htmlSource], ['html']);
