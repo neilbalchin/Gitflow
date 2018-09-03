@@ -4,6 +4,7 @@ var browserSync    = require('browser-sync');
 var reload         = browserSync.reload;
 var clean          = require('gulp-clean');
 var autoprefixer   = require('gulp-autoprefixer');
+var concat         = require('gulp-concat');
 
 var SOURCEPATH = {
     imgSource:  'src/img/**',
@@ -24,6 +25,7 @@ gulp.task('sass', function(){
     gulp.src(SOURCEPATH.scssSource)
     .pipe(autoprefixer())
     .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
+    .pipe(concat('app.css'))
     .pipe(gulp.dest(APPPATH.css))
 });
 
@@ -47,6 +49,7 @@ gulp.task('clean-html', function(){
 
 gulp.task('scripts', ['clean-scripts'], function(){
     gulp.src(SOURCEPATH.jsSource)
+    .pipe(concat('main.js'))
     .pipe(gulp.dest(APPPATH.js))
 });
 
