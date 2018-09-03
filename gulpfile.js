@@ -2,16 +2,20 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var browserSync    = require('browser-sync');
 var reload         = browserSync.reload;
+var clean          = require('gulp-clean');
 
 var SOURCEPATH = {
-    imgSource:  'src/img/',
-    jsSource:   'src/js/',
+    imgSource:  'src/img/**',
+    jsSource:   'src/js/**',
     scssSource: 'src/scss/*.scss',
     htmlSource: 'src/*.html'
 }
 var APPPATH = {
     root:  'app/',
-    css:   'app/css'
+    css:   'app/css',
+    js:   'app/js',
+    fonts:'app/fonts',
+    img:  'app/img'
 }
 
 gulp.task('sass', function(){
@@ -27,15 +31,31 @@ gulp.task('serve', ['sass'], function(){
         }
     })
 });
-
+/*
 gulp.task('copy', function(){
     gulp.src(SOURCEPATH.htmlSource)
     .pipe(gulp.dest(APPPATH.root))
 });
+*/
+gulp.task('html', function(){
+    return gulp.src(SOURCEPATH.htmlSource)
+    .pipe(gulp.dest(APPPATH.root))
+});
 
-gulp.task('watch', ['serve','sass','copy'], function(){
+gulp.task('clean-html', function(){
+    return gulp.src(APPPATH.root + '/*.html', {read: false, force: true})
+    .pipe(clean())
+});
+
+gulp.task('clean-scripts', function(){
+    return gulp.src(APPPATH.js + '/*.js', {read: false, force: true})
+    .pipe(clean())
+});
+
+gulp.task('watch', ['serve','sass','clean-html','html'], function(){
     gulp.watch([SOURCEPATH.scssSource], ['sass']);
-    gulp.watch([SOURCEPATH.htmlSource], ['copy']);
+    // gulp.watch([SOURCEPATH.htmlSource], ['copy']);
+    gulp.watch([SOURCEPATH.htmlSource], ['html']);
 });
 
 gulp.task('default', ['watch']);
