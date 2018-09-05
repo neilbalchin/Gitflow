@@ -6,14 +6,18 @@ var clean          = require('gulp-clean');
 var autoprefixer   = require('gulp-autoprefixer');
 var concat         = require('gulp-concat');
 var jquery         = require('jquery');
+var newer          = require('gulp-newer');
+var imagemin       = require('gulp-imagemin');
+var deleted        = require('gulp-deleted');
+var collate        = require('gulp-collate');
+var changed        = require('gulp-changed');
 
 var SOURCEPATH = {
     imgSource:  'src/img/**',
     jsSource:   'src/js/**',
     jsSourceDest:'src/js',
     scssSource: 'src/scss/*.scss',
-    htmlSource: 'src/*.html',
-    imgSource:  'src/img/**'
+    htmlSource: 'src/*.html'
 }
 var APPPATH = {
     root:  'app/',
@@ -66,12 +70,24 @@ gulp.task('clean-scripts', function(){
     .pipe(clean())
 });
 
-gulp.task('images', function(){
+gulp.task('images', ['clean-images'], function(){
     return gulp.src(SOURCEPATH.imgSource)
+    .pipe(newer(APPPATH.img))
+    .pipe(imagemin())
     .pipe(gulp.dest(APPPATH.img))
 });
 
-gulp.task('watch', ['serve','sass','clean-html','clean-scripts','scripts','images','html','jquery'], function(){
+gulp.task('clean-images', function(){
+    var srcimg = ["src/img/**/*"]
+    var destimg = "app/img/"
+    gulp.src(srcimg)
+    .pipe(collate("img"))
+    .pipe(deleted(destimg, ["**/*"]))
+    .pipe(changed(destimg))
+    .pipe(gulp.dest(destimg))
+});
+
+gulp.task('watch', ['serve','sass','clean-html','clean-scripts','scripts','images','clean-images','html','jquery'], function(){
     gulp.watch([SOURCEPATH.scssSource], ['sass']);
     gulp.watch([SOURCEPATH.jsSource],   ['scripts']);
     gulp.watch([SOURCEPATH.htmlSource], ['html']);

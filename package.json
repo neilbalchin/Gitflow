@@ -18,8 +18,13 @@
     "browser-sync": "^2.24.7",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^6.0.0",
+    "gulp-changed": "^3.2.0",
     "gulp-clean": "^0.4.0",
+    "gulp-collate": "0.0.3",
     "gulp-concat": "^2.6.1",
+    "gulp-deleted": "0.0.2",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-newer": "^1.4.0",
     "gulp-sass": "^4.0.1",
     "jquery": "^3.3.1"
   }
